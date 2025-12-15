@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sudoku Puzzle</title>
+    <style>
+        table { border-collapse: collapse; }
+        td {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid black;
+            font-size: 20px;
+        }
+        .cell-input {
+            display: block;
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            text-align: center;
+            line-height: 40px;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            border: none;
+        }
+        .cell-input:disabled {
+            background-color: #d4edda;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Sudoku Puzzle 🧩 </h1>
+    <p>Mistakes: <span id="mistake-count">0</span> / 3</p>
+    <table>
+        {% for row in range(9) %}
+        <tr>
+            {% for col in range(9) %}
+            <td>
+                {% if board[row][col] == 0 %}
+                    <input
+                        class="cell-input"
+                        type="text"
+                        maxlength="1"
+                        data-row="{{ row }}"
+                        data-col="{{ col }}"
+                    >
+                {% else %}
+                    {{ board [row][col] }}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        const solution = {{ solution|tojson }};
+        const inputs = document.querySelectorAll('.cell-input');
+        const mistakeDisplay = document.getElementById('mistake-count');
+        const maxMistakes = 3;
+        let mistakes = 0;
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                console.log("INPUT EVENT FIRED", input.value);
+            if (input.disabled) return;
+
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            const value = parseInt(input.value);
+            const correctValue = Number(solution[row][col]);
+
+            console.log("value:", value, "correct:", correctValue);
+
+            if (!Number.isInteger(value) || value < 1 || value > 9) { 
+                    input.value = "";
+                    return;
+                }
+
+            if (value !== correctValue) {
+                mistakes += 1;
+                mistakeDisplay.textContent = mistakes;
+                input.value = "";
+
+                if (mistakes >= maxMistakes) {
+                    gameOver();
+                }
+                return; 
+                
+            }
+            
+            input.disabled = true;
+            });
+        });
+
+        function gameOver() {
+            alert("Game Over! You've made too many mistakes.");
+            inputs.forEach(input => input.disabled = true);
+        }
+    </script>
+</body>
+</html>
