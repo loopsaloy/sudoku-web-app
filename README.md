@@ -50,7 +50,7 @@ http://127.0.0.1:5000
 - Timer and score tracking
 - Save and resume game progress
 ## public link 
-COMING SOON
+Link to Render: https://sudoku-web-app-64jf.onrender.com
 ## Contact
 If you have any questions or feedback, feel free to contact me at kristinatwins07@gmail.com
 
